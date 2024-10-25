@@ -41,10 +41,10 @@ contract MarketPlace {
         emit  ProductCreated(_name, _price);
     }
 
-    function productOrder(uint8 _index) external {
+    function productPurchase(uint8 _index) external {
         require(msg.sender != address(0), "Zero address is not allowed");
         require(_index < products.length, "Out of bound!");
-        require(!isSold[_index], "Asset  sold");
+        require(!isSold[_index], "Product  sold");
 
         products[_index].status = OrderStatus.Sold;
         isSold[_index] = true;
