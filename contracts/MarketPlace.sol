@@ -12,17 +12,17 @@ contract MarketPlace {
         Sold
     }
 
-    struct Asset {
+    struct Products {
         string name;
         uint16 price;
         OrderStatus status;
     }
 
-    Asset[] public assets;
+     Products [] public products;
     mapping(uint256 => bool) public isSold;
 
-    event AssetListed(string indexed name, uint16 price);
-    event AssetSold(string indexed name, uint16 price, address buyer);
+    event ProductCreated(string indexed name, uint16 price);
+    event ProductSold(string indexed name, uint16 price, address buyer);
 
     constructor() {
         owner = msg.sender;
@@ -31,25 +31,25 @@ contract MarketPlace {
     function product(string memory _name, uint16 _price) external {
         require(msg.sender != address(0), "Zero address is not allowed");
 
-        Asset memory newAsset;
-        newAsset.name = _name;
-        newAsset.price = _price;
-        newAsset.status = OrderStatus.Created;
+         Products  memory newProduct;
+        newProduct.name = _name;
+        newProduct.price = _price;
+        newProduct.status = OrderStatus.Created;
 
-        assets.push(newAsset);
+        products.push(newProduct);
 
-        emit AssetListed(_name, _price);
+        emit  ProductCreated(_name, _price);
     }
 
     function productOrder(uint8 _index) external {
         require(msg.sender != address(0), "Zero address is not allowed");
-        require(_index < assets.length, "Out of bound!");
+        require(_index < products.length, "Out of bound!");
         require(!isSold[_index], "Asset  sold");
 
-        assets[_index].status = OrderStatus.Sold;
+        products[_index].status = OrderStatus.Sold;
         isSold[_index] = true;
         buyer = msg.sender;
 
-        emit AssetSold(assets[_index].name, assets[_index].price, msg.sender);
+        emit ProductSold(products[_index].name, products[_index].price, msg.sender);
     }
 }
